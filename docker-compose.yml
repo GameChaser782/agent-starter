@@ -1,0 +1,27 @@
+services:
+  agent:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - AGENT_PROVIDER=${AGENT_PROVIDER:-ollama}
+      - AGENT_MODEL=${AGENT_MODEL:-llama3.2}
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - TAVILY_API_KEY=${TAVILY_API_KEY:-}
+    volumes:
+      - agentkit_data:/app/.agentkit
+    depends_on:
+      - ollama
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+
+volumes:
+  agentkit_data:
+  ollama_data:

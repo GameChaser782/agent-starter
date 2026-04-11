@@ -1,0 +1,20 @@
+name: research_assistant
+persona: examples/research_assistant_persona.md
+
+model:
+  provider: ollama
+  name: llama3.2
+  temperature: 0.5   # lower = more factual
+
+tools:
+  - web_search
+  - calculator
+  - file_reader
+
+memory:
+  long_term: true
+  dir: .agentkit
+
+server:
+  host: "0.0.0.0"
+  port: 8001

@@ -1,0 +1,62 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agent-starter"
+version = "0.1.0"
+description = "A local-first LangGraph agent framework. Clone, customize, run."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.11"
+keywords = ["langchain", "langgraph", "agent", "llm", "ollama", "ai"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "langgraph>=0.2.0",
+    "langchain-core>=0.3.0",
+    "langchain-community>=0.3.0",
+    "langchain-ollama>=0.2.0",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.34.0",
+    "click>=8.1.0",
+    "pyyaml>=6.0",
+    "python-dotenv>=1.0.0",
+    "aiosqlite>=0.20.0",
+    "httpx>=0.27.0",
+]
+
+[project.optional-dependencies]
+anthropic = ["langchain-anthropic>=0.3.0"]
+openai = ["langchain-openai>=0.3.0"]
+google = ["langchain-google-genai>=2.0.0"]
+search = ["tavily-python>=0.5.0"]
+postgres = ["psycopg[binary]>=3.2.0"]
+all = ["agent-starter[anthropic,openai,google,search,postgres]"]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=5.0.0",
+]
+
+[project.scripts]
+agent-starter = "agent_starter.__main__:cli"
+
+[project.urls]
+Homepage = "https://github.com/GameChaser782/agent-starter"
+Repository = "https://github.com/GameChaser782/agent-starter"
+Issues = "https://github.com/GameChaser782/agent-starter/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["agent_starter*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.whl
+*.so
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# agent-starter data
+.agentkit/
+
+# Environment
+.env
+*.local
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Jupyter (keeping for reference but no longer used)
+.ipynb_checkpoints/
