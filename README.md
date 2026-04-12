@@ -313,10 +313,6 @@ All YAML keys can be overridden with environment variables:
 | `server.host` | `AGENT_SERVER_HOST` | `0.0.0.0` |
 | `server.port` | `AGENT_SERVER_PORT` | `8000` |
 | *(n/a)* | `OLLAMA_BASE_URL` | `http://localhost:11434` |
-| *(n/a)* | `GITHUB_TOKEN` | *(none)* |
-| *(n/a)* | `ANTHROPIC_API_KEY` | *(none)* |
-| *(n/a)* | `OPENAI_API_KEY` | *(none)* |
-| *(n/a)* | `TAVILY_API_KEY` | *(none)* |
 
 ---
 
