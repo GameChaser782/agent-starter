@@ -15,7 +15,7 @@ class AgentConfig:
     name: str = "default"
     persona_text: str = "You are a helpful assistant."
     model_provider: str = "ollama"
-    model_name: str = "llama3.2"
+    model_name: str = "qwen3.5"
     temperature: float = 0.7
     tools: list[str] = field(default_factory=list)
     memory_dir: str = ".agentkit"
@@ -24,6 +24,7 @@ class AgentConfig:
     server_host: str = "0.0.0.0"
     server_port: int = 8000
     ollama_base_url: str = "http://localhost:11434"
+    thinking: bool = False
 
 
 def load_config(agent_name: str = "default", config_dir: str = "agents") -> AgentConfig:
@@ -51,7 +52,7 @@ def load_config(agent_name: str = "default", config_dir: str = "agents") -> Agen
         persona_text=persona_text,
         # env vars take priority over YAML
         model_provider=os.getenv("AGENT_PROVIDER", model_cfg.get("provider", "ollama")),
-        model_name=os.getenv("AGENT_MODEL", model_cfg.get("name", "llama3.2")),
+        model_name=os.getenv("AGENT_MODEL", model_cfg.get("name", "qwen3.5")),
         temperature=float(os.getenv("AGENT_TEMPERATURE", model_cfg.get("temperature", 0.7))),
         tools=cfg.get("tools", []),
         memory_dir=os.getenv("AGENT_MEMORY_DIR", memory_cfg.get("dir", ".agentkit")),
@@ -60,4 +61,5 @@ def load_config(agent_name: str = "default", config_dir: str = "agents") -> Agen
         server_host=os.getenv("AGENT_SERVER_HOST", server_cfg.get("host", "0.0.0.0")),
         server_port=int(os.getenv("AGENT_SERVER_PORT", server_cfg.get("port", 8000))),
         ollama_base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"),
+        thinking=os.getenv("AGENT_THINKING", str(model_cfg.get("thinking", False))).lower() == "true",
     )

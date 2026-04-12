@@ -60,7 +60,13 @@ class AgentKit:
             "user_profile": {"user_id": user_id},
         }
         result = graph.invoke(state_input, config=config)
-        return result["messages"][-1].content
+        content = result["messages"][-1].content
+        if isinstance(content, list):
+            return "".join(
+                block["text"] for block in content
+                if isinstance(block, dict) and block.get("type") == "text"
+            )
+        return content
 
     async def stream(
         self,

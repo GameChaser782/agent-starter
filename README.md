@@ -39,11 +39,16 @@ cd agent-starter
 # 2. Install
 pip install -e .
 
-# 3. Start Ollama (if not already running)
-ollama serve &
-ollama pull llama3.2
+# 3. Set up your .env
+cp .env.example .env
+# Fill in API keys for whichever provider you want to use (see below).
+# Using Ollama? Skip this — no key needed.
 
-# 4. Run
+# 4. Start Ollama (default provider — free, runs locally)
+ollama serve &
+ollama pull qwen3.5
+
+# 5. Run
 python examples/01_basic/run.py
 ```
 
@@ -52,6 +57,18 @@ Or use the CLI:
 ```bash
 agent-starter chat
 ```
+
+**`.env` keys** (only set what you need):
+
+```ini
+ANTHROPIC_API_KEY=sk-ant-...   # Anthropic Claude + image_vision
+OPENAI_API_KEY=sk-...          # OpenAI + image_vision fallback
+GOOGLE_API_KEY=...             # Google Gemini
+TAVILY_API_KEY=tvly-...        # Web search tool (optional, falls back to DuckDuckGo)
+GITHUB_TOKEN=ghp_...           # GitHub tools — private repos + higher rate limits (optional)
+```
+
+> Ollama is the default — `ollama serve` is all you need, no `.env` required.
 
 ---
 
@@ -88,7 +105,7 @@ persona: my_agent_persona.md
 
 model:
   provider: ollama      # ollama | anthropic | openai | google
-  name: llama3.2
+  name: qwen3.5
 
 tools:
   - calculator
@@ -113,6 +130,42 @@ You are a focused coding assistant. You help developers debug Python code.
 Then run it:
 ```bash
 agent-starter chat --agent my_agent
+```
+
+---
+
+## Built-in tools
+
+Enable any tool by adding its name to the `tools` list in your agent YAML:
+
+| Tool | What it does | Requires |
+|------|-------------|----------|
+| `calculator` | Safe math expression evaluator | — |
+| `file_reader` | Read a local text file | — |
+| `bash_exec` | Run a shell command, return stdout/stderr | — |
+| `code_editor` | Read, write, or str-replace files | — |
+| `python_repl` | Execute Python code in a subprocess | — |
+| `sqlite_query` | Run SQL against a local `.db` file | — |
+| `web_search` | Search the web | `TAVILY_API_KEY` (or falls back to DuckDuckGo) |
+| `github_read_file` | Read a file from a GitHub repo | `GITHUB_TOKEN` (optional, for private repos) |
+| `github_list_issues` | List issues in a repo | `GITHUB_TOKEN` (optional) |
+| `github_get_issue` | Get full details of an issue or PR | `GITHUB_TOKEN` (optional) |
+| `image_vision` | Describe or analyze an image (path or URL) | `ANTHROPIC_API_KEY` or `OPENAI_API_KEY` |
+
+Example — enable a few tools in your YAML:
+
+```yaml
+tools:
+  - calculator
+  - code_editor
+  - bash_exec
+  - python_repl
+  - sqlite_query
+  - github_read_file
+  - github_list_issues
+  - github_get_issue
+  - image_vision
+  # - web_search      # set TAVILY_API_KEY
 ```
 
 ---
@@ -252,13 +305,18 @@ All YAML keys can be overridden with environment variables:
 | YAML key | Env var | Default |
 |----------|---------|---------|
 | `model.provider` | `AGENT_PROVIDER` | `ollama` |
-| `model.name` | `AGENT_MODEL` | `llama3.2` |
+| `model.name` | `AGENT_MODEL` | `qwen3.5` |
 | `model.temperature` | `AGENT_TEMPERATURE` | `0.7` |
+| `model.thinking` | `AGENT_THINKING` | `false` |
 | `memory.long_term` | `AGENT_LONG_TERM_MEMORY` | `true` |
 | `memory.dir` | `AGENT_MEMORY_DIR` | `.agentkit` |
 | `server.host` | `AGENT_SERVER_HOST` | `0.0.0.0` |
 | `server.port` | `AGENT_SERVER_PORT` | `8000` |
 | *(n/a)* | `OLLAMA_BASE_URL` | `http://localhost:11434` |
+| *(n/a)* | `GITHUB_TOKEN` | *(none)* |
+| *(n/a)* | `ANTHROPIC_API_KEY` | *(none)* |
+| *(n/a)* | `OPENAI_API_KEY` | *(none)* |
+| *(n/a)* | `TAVILY_API_KEY` | *(none)* |
 
 ---
 

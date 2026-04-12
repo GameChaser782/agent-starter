@@ -17,6 +17,7 @@ def create_llm(config: AgentConfig) -> BaseChatModel:
             model=model,
             temperature=temperature,
             base_url=config.ollama_base_url,
+            think=config.thinking,
         )
 
     if provider == "anthropic":
@@ -24,7 +25,10 @@ def create_llm(config: AgentConfig) -> BaseChatModel:
             from langchain_anthropic import ChatAnthropic
         except ImportError:
             raise ImportError("Install Anthropic support: pip install 'agent-starter[anthropic]'")
-        return ChatAnthropic(model=model, temperature=temperature)
+        kwargs = {"model": model, "temperature": temperature}
+        if config.thinking:
+            kwargs["thinking"] = {"type": "enabled", "budget_tokens": 5000}
+        return ChatAnthropic(**kwargs)
 
     if provider == "openai":
         try:

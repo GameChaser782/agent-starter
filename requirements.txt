@@ -1,4 +1,4 @@
--e git+https://github.com/GameChaser782/Question-Answering-from-Sources-Bot-using-LangChain.git@fc51ddadfe349053851bb94504ecc5011b7125b9#egg=agent_starter
+-e git+https://github.com/GameChaser782/agent-starter.git@fc51ddadfe349053851bb94504ecc5011b7125b9#egg=agent_starter
 aiohappyeyeballs==2.6.1
 aiohttp==3.13.5
 aiosignal==1.4.0
