@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>agent-starter Docs</title>
+  <meta
+    name="description"
+    content="Documentation site for agent-starter, a local-first LangGraph agent framework."
+  >
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body id="top">
+  <button
+    class="theme-toggle"
+    type="button"
+    aria-label="Toggle color theme"
+    title="Toggle color theme"
+  >
+    <span class="theme-toggle-ring"></span>
+    <span class="theme-toggle-core">
+      <span class="theme-icon theme-icon-sun" aria-hidden="true"></span>
+      <span class="theme-icon theme-icon-moon" aria-hidden="true"></span>
+    </span>
+  </button>
+  <div class="page-shell">
+    <main id="docs" class="docs-layout">
+      <aside class="sidebar">
+        <div class="sidebar-top">
+          <div>
+            <p class="sidebar-title">Documentation</p>
+            <a class="sidebar-link" href="https://github.com/GameChaser782/agent-starter" target="_blank" rel="noreferrer">Repository</a>
+          </div>
+        </div>
+        <div class="tab-list" role="tablist" aria-label="Documentation Sections">
+          <button class="tab-button active" role="tab" aria-selected="true" aria-controls="panel-quickstart" id="tab-quickstart" data-tab="quickstart">Quickstart</button>
+          <button class="tab-button" role="tab" aria-selected="false" aria-controls="panel-installation" id="tab-installation" data-tab="installation">Installation</button>
+          <button class="tab-button" role="tab" aria-selected="false" aria-controls="panel-usage" id="tab-usage" data-tab="usage">Core Usage</button>
+          <button class="tab-button" role="tab" aria-selected="false" aria-controls="panel-tools" id="tab-tools" data-tab="tools">Built-in Tools</button>
+          <button class="tab-button" role="tab" aria-selected="false" aria-controls="panel-examples" id="tab-examples" data-tab="examples">Examples</button>
+          <button class="tab-button" role="tab" aria-selected="false" aria-controls="panel-api" id="tab-api" data-tab="api">API Server</button>
+          <button class="tab-button" role="tab" aria-selected="false" aria-controls="panel-config" id="tab-config" data-tab="config">Configuration</button>
+        </div>
+      </aside>
+
+      <section class="doc-panels">
+        <article class="tab-panel active" role="tabpanel" id="panel-quickstart" aria-labelledby="tab-quickstart" data-panel="quickstart">
+          <div class="section-head">
+            <p class="kicker">Quickstart</p>
+            <h2>Working agent in under a minute</h2>
+          </div>
+
+          <div class="callout">
+            <strong>Default flow:</strong> clone the repo, install in editable mode,
+            start Ollama, then run the bundled basic example or the CLI.
+          </div>
+
+<pre><code>git clone https://github.com/GameChaser782/agent-starter.git
+cd agent-starter
+pip install -e .
+copy .env.example .env
+ollama serve
+ollama pull qwen3.5
+python examples/01_basic/run.py</code></pre>
+
+          <div class="card-grid">
+            <section class="card">
+              <h3>What you get</h3>
+              <p>Agent orchestration, persistent memory, built-in tools, CLI commands, and a FastAPI surface.</p>
+            </section>
+            <section class="card">
+              <h3>Main entry point</h3>
+              <p><code>AgentKit</code> is the package entry point exported from <code>agent_starter</code>.</p>
+            </section>
+            <section class="card">
+              <h3>Version</h3>
+              <p>Current package version in this repository: <code>0.1.0</code>.</p>
+            </section>
+          </div>
+        </article>
+
+        <article class="tab-panel" role="tabpanel" id="panel-installation" aria-labelledby="tab-installation" data-panel="installation" hidden>
+          <div class="section-head">
+            <p class="kicker">Installation</p>
+            <h2>Choose local-first by default, add providers as needed</h2>
+          </div>
+
+          <div class="split">
+            <div>
+              <h3>Base install</h3>
+<pre><code>pip install -e .</code></pre>
+            </div>
+            <div>
+              <h3>Optional extras</h3>
+<pre><code>pip install "agent-starter[anthropic]"
+pip install "agent-starter[openai]"
+pip install "agent-starter[google]"
+pip install "agent-starter[search]"
+pip install "agent-starter[all]"</code></pre>
+            </div>
+          </div>
+
+          <h3>Environment variables</h3>
+<pre><code>ANTHROPIC_API_KEY=sk-ant-...
+OPENAI_API_KEY=sk-...
+GOOGLE_API_KEY=...
+TAVILY_API_KEY=tvly-...
+GITHUB_TOKEN=ghp_...</code></pre>
+
+          <p class="muted">
+            Ollama is the default model provider. If you stay on Ollama, you can run
+            locally without cloud API keys.
+          </p>
+        </article>
+
+        <article class="tab-panel" role="tabpanel" id="panel-usage" aria-labelledby="tab-usage" data-panel="usage" hidden>
+          <div class="section-head">
+            <p class="kicker">Core Usage</p>
+            <h2>Start simple, then extend with your own tools and agents</h2>
+          </div>
+
+          <h3>Minimal Python usage</h3>
+<pre><code>from agent_starter import AgentKit
+
+agent = AgentKit()
+thread_id = agent.new_thread()
+
+response = agent.chat("Summarize why LangGraph is useful", thread_id=thread_id)
+print(response)</code></pre>
+
+          <h3>Register a custom tool</h3>
+<pre><code>from agent_starter import AgentKit
+
+agent = AgentKit()
+
+@agent.tool
+def get_weather(city: str) -> str:
+    """Get the current weather for a city."""
+    return f"It's 22C and sunny in {city}."
+
+print(agent.chat("What is the weather in Tokyo?"))</code></pre>
+
+          <h3>CLI commands</h3>
+<pre><code>agent-starter chat --agent default
+agent-starter chat --agent examples/research_assistant
+agent-starter serve --agent default --port 8000</code></pre>
+        </article>
+
+        <article class="tab-panel" role="tabpanel" id="panel-tools" aria-labelledby="tab-tools" data-panel="tools" hidden>
+          <div class="section-head">
+            <p class="kicker">Built-in Tools</p>
+            <h2>Enable only the tools your agent actually needs</h2>
+          </div>
+
+          <div class="tool-grid">
+            <section class="tool-card"><h3>calculator</h3><p>Safe math expression evaluation.</p></section>
+            <section class="tool-card"><h3>file_reader</h3><p>Read local text files.</p></section>
+            <section class="tool-card"><h3>bash_exec</h3><p>Run shell commands and capture output.</p></section>
+            <section class="tool-card"><h3>code_editor</h3><p>Read, write, and replace text in files.</p></section>
+            <section class="tool-card"><h3>python_repl</h3><p>Execute Python code in a subprocess.</p></section>
+            <section class="tool-card"><h3>sqlite_query</h3><p>Run SQL against local SQLite databases.</p></section>
+            <section class="tool-card"><h3>web_search</h3><p>Search the web, optionally powered by Tavily.</p></section>
+            <section class="tool-card"><h3>github_read_file</h3><p>Read files from GitHub repositories.</p></section>
+            <section class="tool-card"><h3>github_list_issues</h3><p>List repository issues.</p></section>
+            <section class="tool-card"><h3>github_get_issue</h3><p>Fetch issue or pull request details.</p></section>
+            <section class="tool-card"><h3>image_vision</h3><p>Analyze local or remote images with a vision-capable model.</p></section>
+          </div>
+
+          <h3>Enable tools in YAML</h3>
+<pre><code>tools:
+  - calculator
+  - file_reader
+  - web_search
+  - github_read_file</code></pre>
+        </article>
+
+        <article class="tab-panel" role="tabpanel" id="panel-examples" aria-labelledby="tab-examples" data-panel="examples" hidden>
+          <div class="section-head">
+            <p class="kicker">Examples</p>
+            <h2>Progressive examples from minimal chat to multi-agent workflows</h2>
+          </div>
+
+          <div class="timeline">
+            <section class="timeline-item">
+              <span class="timeline-step">01</span>
+              <div>
+                <h3>Basic</h3>
+                <p>Minimal CLI-style chat loop using <code>AgentKit()</code> and a generated thread id.</p>
+                <code>python examples/01_basic/run.py</code>
+              </div>
+            </section>
+            <section class="timeline-item">
+              <span class="timeline-step">02</span>
+              <div>
+                <h3>Intermediate</h3>
+                <p>Add custom tools with <code>@agent.tool</code> and keep a persistent thread across turns.</p>
+                <code>python examples/02_intermediate/run.py</code>
+              </div>
+            </section>
+            <section class="timeline-item">
+              <span class="timeline-step">03</span>
+              <div>
+                <h3>Advanced</h3>
+                <p>Supervisor plus sub-agent, streaming output, long-term memory, and optional API serving.</p>
+                <code>python examples/03_advanced/run.py</code>
+              </div>
+            </section>
+          </div>
+        </article>
+
+        <article class="tab-panel" role="tabpanel" id="panel-api" aria-labelledby="tab-api" data-panel="api" hidden>
+          <div class="section-head">
+            <p class="kicker">API Server</p>
+            <h2>Serve the same agent behind FastAPI</h2>
+          </div>
+
+<pre><code>agent-starter serve
+# http://localhost:8000
+# http://localhost:8000/docs</code></pre>
+
+          <div class="endpoint-list">
+            <section class="endpoint">
+              <h3><span>POST</span> /chat</h3>
+              <p>Returns a full response string for a message, thread, and user.</p>
+            </section>
+            <section class="endpoint">
+              <h3><span>POST</span> /stream</h3>
+              <p>Streams tokens over server-sent events and ends with <code>[DONE]</code>.</p>
+            </section>
+            <section class="endpoint">
+              <h3><span>GET</span> /memory/{user_id}</h3>
+              <p>Returns stored long-term memories when that feature is enabled.</p>
+            </section>
+            <section class="endpoint">
+              <h3><span>GET</span> /health</h3>
+              <p>Simple health response for probes and local checks.</p>
+            </section>
+          </div>
+
+          <h3>Sample request</h3>
+<pre><code>curl -X POST http://localhost:8000/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message":"Hello","thread_id":"t1","user_id":"alice"}'</code></pre>
+        </article>
+
+        <article class="tab-panel" role="tabpanel" id="panel-config" aria-labelledby="tab-config" data-panel="config" hidden>
+          <div class="section-head">
+            <p class="kicker">Configuration</p>
+            <h2>Agent behavior lives in YAML plus persona markdown</h2>
+          </div>
+
+<pre><code>name: default
+persona: default_persona.md
+
+model:
+  provider: ollama
+  name: qwen3.5:4b
+  temperature: 0.7
+  thinking: false
+
+tools:
+  - calculator
+  - file_reader
+
+memory:
+  long_term: true
+  dir: .agentkit
+  thread_ttl: 3600
+
+server:
+  host: "0.0.0.0"
+  port: 8000</code></pre>
+
+          <div class="card-grid">
+            <section class="card">
+              <h3>Env overrides</h3>
+              <p><code>AGENT_PROVIDER</code>, <code>AGENT_MODEL</code>, <code>AGENT_TEMPERATURE</code>, <code>AGENT_LONG_TERM_MEMORY</code>, and server vars can override YAML.</p>
+            </section>
+            <section class="card">
+              <h3>Persona source</h3>
+              <p>The persona file is loaded from the agent config directory and injected into the graph as plain markdown text.</p>
+            </section>
+            <section class="card">
+              <h3>Memory directory</h3>
+              <p>Long-term memory defaults to <code>.agentkit</code> and uses SQLite storage.</p>
+            </section>
+          </div>
+        </article>
+
+      </section>
+    </main>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>
