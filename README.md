@@ -261,6 +261,18 @@ curl -X POST http://localhost:8000/stream \
 
 ---
 
+## Documentation site
+
+Project documentation for the module lives in [`web/`](web/).
+
+- Preview locally by opening `web/index.html` or serving the folder with a static file server
+- Deploy with GitHub Pages through [`.github/workflows/deploy-docs.yml`](.github/workflows/deploy-docs.yml)
+- GitHub Pages should be configured as `Settings -> Pages -> Source -> GitHub Actions`
+
+Any push to `main` that changes `web/` or the deploy workflow will publish the docs site again.
+
+---
+
 ## Progressive examples
 
 | Example | What it shows |
